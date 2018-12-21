@@ -20,4 +20,6 @@ import java.lang.annotation.Target;
 @Documented
 public @interface Encrypt {
 
+    boolean value() default true;
+
 }
