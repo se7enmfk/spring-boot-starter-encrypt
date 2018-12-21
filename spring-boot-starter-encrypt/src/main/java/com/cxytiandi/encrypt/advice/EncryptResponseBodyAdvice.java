@@ -37,7 +37,7 @@ public class EncryptResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 	@Autowired
 	private EncryptProperties encryptProperties;
 	
-	private static ThreadLocal<Boolean> encryptLocal = new ThreadLocal<Boolean>();
+	private static ThreadLocal<Boolean> encryptLocal = new ThreadLocal<>();
 	
 	public static void setEncryptStatus(boolean status) {
 		encryptLocal.set(status);
@@ -51,7 +51,7 @@ public class EncryptResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 			Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
 		// 可以通过调用EncryptResponseBodyAdvice.setEncryptStatus(false);来动态设置不加密操作
 		Boolean status = encryptLocal.get();
-		if (status != null && status == false) {
+		if (status != null && !status) {
 			encryptLocal.remove();
 			return body;
 		}
