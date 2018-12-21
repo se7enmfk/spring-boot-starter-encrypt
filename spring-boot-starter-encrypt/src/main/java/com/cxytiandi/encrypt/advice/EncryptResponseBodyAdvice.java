@@ -27,7 +27,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 @ControllerAdvice
 public class EncryptResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 
-    private Logger logger = LoggerFactory.getLogger(EncryptResponseBodyAdvice.class);
+    private Logger logger = LoggerFactory.getLogger(com.cxytiandi.encrypt.advice.EncryptResponseBodyAdvice.class);
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -56,7 +56,10 @@ public class EncryptResponseBodyAdvice implements ResponseBodyAdvice<Object> {
         long startTime = System.currentTimeMillis();
         Encrypt methodAnnotation = returnType.getMethodAnnotation(Encrypt.class);
 
-        if (methodAnnotation != null && methodAnnotation.value() && !encryptProperties.isDebug()) {
+        //有encrypt且value=false才不加密
+        boolean valid = !encryptProperties.isDebug() && (methodAnnotation == null || methodAnnotation.value());
+
+        if (valid) {
             try {
                 String content = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(body);
                 if (!StringUtils.hasText(encryptProperties.getKey())) {
