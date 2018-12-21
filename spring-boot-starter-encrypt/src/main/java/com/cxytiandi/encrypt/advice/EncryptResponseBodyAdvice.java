@@ -58,7 +58,7 @@ public class EncryptResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 		
 		long startTime = System.currentTimeMillis();
 		boolean encrypt = false;
-		Encrypt e =returnType.getMethod().getAnnotation(Encrypt.class);
+		Encrypt e = returnType.getMethodAnnotation(Encrypt.class);
 		
 		if (e.value() && !encryptProperties.isDebug()) {
 			encrypt = true;
