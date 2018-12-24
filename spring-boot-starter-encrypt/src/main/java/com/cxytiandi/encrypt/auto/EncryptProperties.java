@@ -9,6 +9,8 @@ public class EncryptProperties {
 	 */
 	private String key;
 
+	private String markMsg;
+
 	private String charset = "UTF-8";
 	
 	/**
@@ -53,4 +55,12 @@ public class EncryptProperties {
 		this.debug = debug;
 	}
 
+    public String getMarkMsg() {
+        return markMsg;
+    }
+
+    public EncryptProperties setMarkMsg(String markMsg) {
+        this.markMsg = markMsg;
+        return this;
+    }
 }

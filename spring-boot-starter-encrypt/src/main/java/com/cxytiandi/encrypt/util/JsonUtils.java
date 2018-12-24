@@ -1,9 +1,10 @@
 package com.cxytiandi.encrypt.util;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
-import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * Json 工具类
  * @author yinjihuan
@@ -25,7 +26,6 @@ public class JsonUtils {
 			throw new RuntimeException("序列化对象【"+obj+"】时出错", e);
 		}
 	}
-	
 	public static <T> T toBean(Class<T> entityClass, String jsonString){
 		try {
 			return mapper.readValue(jsonString, entityClass);

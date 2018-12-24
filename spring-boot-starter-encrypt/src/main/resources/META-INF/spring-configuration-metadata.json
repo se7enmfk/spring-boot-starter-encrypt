@@ -18,5 +18,10 @@
       "name": "spring.encrypt.debug",
       "type": "java.lang.Boolean"
     },
+    {
+      "sourceType": "com.cxytiandi.encrypt.auto.EncryptProperties",
+      "name": "spring.encrypt.mark-msg",
+      "type": "java.lang.String"
+    }
   ]
 }

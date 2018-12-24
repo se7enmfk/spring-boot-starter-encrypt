@@ -54,9 +54,9 @@ public class EncryptResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 //        }
 
         long startTime = System.currentTimeMillis();
-        Encrypt methodAnnotation = returnType.getMethodAnnotation(Encrypt.class);
 
-        //有encrypt且value=false才不加密
+        //region 有encrypt且value=false才不加密
+        Encrypt methodAnnotation = returnType.getMethodAnnotation(Encrypt.class);
         boolean valid = !encryptProperties.isDebug() && (methodAnnotation == null || methodAnnotation.value());
 
         if (valid) {
@@ -73,6 +73,7 @@ public class EncryptResponseBodyAdvice implements ResponseBodyAdvice<Object> {
                 logger.error("加密数据异常", e);
             }
         }
+        //endregion
 
         return body;
     }
