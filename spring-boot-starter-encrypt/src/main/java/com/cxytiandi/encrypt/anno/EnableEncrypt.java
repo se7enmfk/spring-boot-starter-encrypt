@@ -7,9 +7,9 @@ import java.lang.annotation.*;
 
 /**
  * 启用加密Starter
- * 
+ *
  * <p>在Spring Boot启动类上加上此注解<p>
- * 
+ *
  * <pre class="code">
  * &#064;SpringBootApplication
  * &#064;EnableEncrypt
@@ -19,7 +19,7 @@ import java.lang.annotation.*;
  *     }
  * }
  * <pre>
- * 
+ *
  * @author yinjihuan
  *
  * @about http://cxytiandi.com/about

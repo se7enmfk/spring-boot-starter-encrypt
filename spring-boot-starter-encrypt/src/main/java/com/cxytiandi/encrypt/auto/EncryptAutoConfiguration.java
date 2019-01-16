@@ -11,11 +11,9 @@ import com.cxytiandi.encrypt.advice.EncryptResponseBodyAdvice;
 
 /**
  * 加解密自动配置
- * 
- * @author yinjihuan
- * 
- * @about http://cxytiandi.com/about
  *
+ * @author yinjihuan
+ * @about http://cxytiandi.com/about
  */
 @Configuration
 @Component
@@ -23,22 +21,24 @@ import com.cxytiandi.encrypt.advice.EncryptResponseBodyAdvice;
 @EnableConfigurationProperties(EncryptProperties.class)
 public class EncryptAutoConfiguration {
 
-	/**
-	 * 配置请求解密
-	 * @return
-	 */
-	@Bean
-	public EncryptResponseBodyAdvice encryptResponseBodyAdvice() {
-		return new EncryptResponseBodyAdvice();
-	}
-	
-	/**
-	 * 配置请求加密
-	 * @return
-	 */
-	@Bean
-	public EncryptRequestBodyAdvice encryptRequestBodyAdvice() {
-		return new EncryptRequestBodyAdvice();
-	}
-	
+    /**
+     * 配置请求解密
+     *
+     * @return
+     */
+    @Bean
+    public EncryptResponseBodyAdvice encryptResponseBodyAdvice() {
+        return new EncryptResponseBodyAdvice();
+    }
+
+    /**
+     * 配置请求加密
+     *
+     * @return
+     */
+    @Bean
+    public EncryptRequestBodyAdvice encryptRequestBodyAdvice() {
+        return new EncryptRequestBodyAdvice();
+    }
+
 }

@@ -16,6 +16,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+import java.util.TimeZone;
+
 /**
  * 请求响应处理类<br>
  * <p>
@@ -61,6 +63,7 @@ public class EncryptResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 
         if (valid) {
             try {
+                objectMapper.setTimeZone(TimeZone.getTimeZone(encryptProperties.getTimeZone()));
                 String content = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(body);
                 if (!StringUtils.hasText(encryptProperties.getKey())) {
                     throw new NullPointerException("请配置spring.encrypt.key");
