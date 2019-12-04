@@ -18,6 +18,7 @@ import org.activiti.image.impl.DefaultProcessDiagramGenerator;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Collections;
@@ -47,13 +48,12 @@ public class ProcessInstanceDiagramCmd implements Command<InputStream> {
     public InputStream execute(CommandContext commandContext) {
         File imageFile = new File(filePath);
         InputStream inputStream = null;
-
+        String processDefinitionId = null;
+        List<String> activityIds = null;
+        ExecutionEntity executionEntity = null;
+        Map<String, Object> variables = null;
         try {
             FileOutputStream outStream = new FileOutputStream(imageFile);
-            String processDefinitionId = null;
-            List<String> activityIds = null;
-            ExecutionEntity executionEntity = null;
-            Map<String, Object> variables = null;
             if (StringUtil.isNotEmpty(taskId)) {
                 ExecutionEntityManager executionEntityManager = commandContext.getExecutionEntityManager();
                 executionEntity = executionEntityManager.findExecutionById(processInstanceId);
@@ -106,7 +106,7 @@ public class ProcessInstanceDiagramCmd implements Command<InputStream> {
             //关闭输出流
             outStream.close();
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return inputStream;

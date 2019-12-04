@@ -40,10 +40,6 @@ public class SystemConfig {
      */
     public static int ROWS_PER_PAGE;
 
-    public static String FILES_UPLOAD_PATH;
-    public static String FILES_TEMP_PATH;
-
-
     public static String MANAGE_EMAIL_ACCOUNT;
     public static String HOST_EMAIL_ACCOUNT;
     public static String HOST_EMAIL_PASSWORD;
@@ -63,9 +59,6 @@ public class SystemConfig {
         COUNTRY_CODE = properties.getProperty("base.country.code");
         EXP_TIME = properties.getPropertyAsInt("base.expirationTime");
         SYSTEM_NAME = properties.getProperty("base.system.name");
-
-        FILES_UPLOAD_PATH = properties.getProperty("base.files.uploadPath");
-        FILES_TEMP_PATH = properties.getProperty("base.files.tempPath");
 
         HOST_EMAIL_ACCOUNT = properties.getProperty("base.host.emailAccount");
         HOST_EMAIL_PASSWORD = properties.getProperty("base.host.emailPassword");

@@ -30,32 +30,25 @@ public class StatisticsUtil {
      */
     public static <T> double[] getProReturns(List<T> list, String[] proCodes, Double[] weights, String valueName) {
 
-        Double[][] proAryReturns = null;
-        try {
-            proAryReturns = new Double[proCodes.length][];
-            for (int i = 0; i < proCodes.length; i++) {
-                String proCode = proCodes[i];
-                List<Double> returnsList = new ArrayList<>();
-                for (T p : list) {
-                    String pro_code = (String) ObjectUtil.invokeGetter(p, PRO_CODE, false);
-                    if (proCode.equals(pro_code)) {
-                        BigDecimal o = (BigDecimal) ObjectUtil.invokeGetter(p, valueName, false);
-                        returnsList.add(o.doubleValue());
-                    }
+        Double[][] proAryReturns = new Double[proCodes.length][];
+        for (int i = 0; i < proCodes.length; i++) {
+            String proCode = proCodes[i];
+            List<Double> returnsList = new ArrayList<>();
+            for (T p : list) {
+                String pro_code = (String) ObjectUtil.invokeGetter(p, PRO_CODE, false);
+                if (proCode.equals(pro_code)) {
+                    BigDecimal o = (BigDecimal) ObjectUtil.invokeGetter(p, valueName, false);
+                    returnsList.add(o.doubleValue());
                 }
-
-                proAryReturns[i] = returnsList.toArray(new Double[returnsList.size()]);
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            proAryReturns[i] = returnsList.toArray(new Double[returnsList.size()]);
         }
-        return StatisticsUtil.combineProductReturn(proAryReturns, weights);
 
+        return StatisticsUtil.combineProductReturn(proAryReturns, weights);
     }
 
     /**
-     *
      * @param fdcEntityList
      * @param fieldName
      * @param <T>

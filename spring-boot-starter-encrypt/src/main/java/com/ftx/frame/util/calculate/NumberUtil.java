@@ -5,6 +5,7 @@
 package com.ftx.frame.util.calculate;
 
 import com.ftx.frame.common.component.SystemConfig;
+import com.ftx.frame.util.BaseConstant;
 import com.ftx.frame.util.string.StringUtil;
 
 import java.math.BigDecimal;
@@ -18,22 +19,17 @@ public class NumberUtil {
     private static final DecimalFormat format4 = new DecimalFormat("#,###.0000");
     private static final DecimalFormat format2percent = new DecimalFormat("#,###.00%");
     private static final DecimalFormat format4percent = new DecimalFormat("#,###.0000%");
-    public static final BigDecimal HUNDRED = new BigDecimal(100);
 
-    private NumberUtil() {
-    }
 
-    public static boolean isNumber(String src) {
-        boolean isNumber = false;
-        try {
-            Double.parseDouble(src);
-            isNumber = true;
-        } catch (NumberFormatException numberformatexception) {
-        }
-        return isNumber;
-    }
-
+    /**
+     * 除法
+     *
+     * @param dividend
+     * @param divisor
+     * @return
+     */
     public static BigDecimal saveDivide(BigDecimal dividend, BigDecimal divisor) {
+
         BigDecimal percent = null;
         if (dividend != null && divisor != null
                 && divisor.compareTo(BigDecimal.ZERO) != 0)
@@ -41,6 +37,13 @@ public class NumberUtil {
         return percent;
     }
 
+    /**
+     * 乘法
+     *
+     * @param multiplicand
+     * @param multiplier
+     * @return
+     */
     public static BigDecimal saveMultiply(BigDecimal multiplicand,
                                           BigDecimal multiplier) {
         BigDecimal g = null;
@@ -49,6 +52,12 @@ public class NumberUtil {
         return g;
     }
 
+    /**
+     * 加法
+     *
+     * @param numbers
+     * @return
+     */
     public static BigDecimal saveAdd(BigDecimal... numbers) {
         BigDecimal total = null;
         if (numbers != null) {
@@ -66,6 +75,13 @@ public class NumberUtil {
         return total;
     }
 
+    /**
+     * 减法
+     *
+     * @param minuend
+     * @param minus
+     * @return
+     */
     public static BigDecimal saveSubtract(BigDecimal minuend, BigDecimal minus) {
         if (minuend == null)
             if (minus != null)
@@ -78,12 +94,22 @@ public class NumberUtil {
             return minuend;
     }
 
+    public static int compareTo(BigDecimal front, BigDecimal back) {
+        if (front == null) {
+            front = toBigDecimal(-99999999);
+        }
+        if (back == null) {
+            back = toBigDecimal(-99999999);
+        }
+        return front.compareTo(back);
+
+    }
+
     public static String formatCurrency(BigDecimal money, int scale) {
         return formatCurrency(money, scale, SystemConfig.ROUNDING_MODE);
     }
 
-    public static String formatCurrency(BigDecimal money, int scale,
-                                        RoundingMode roundingMode) {
+    public static String formatCurrency(BigDecimal money, int scale, RoundingMode roundingMode) {
         String output = null;
         if (money != null) {
             money = money.setScale(scale, roundingMode);
@@ -94,24 +120,19 @@ public class NumberUtil {
             else if (scale == 0)
                 output = format0.format(money);
             else
-                output = (new DecimalFormat(getNumberFormatString(scale)
-                        .toString())).format(money);
+                output = (new DecimalFormat(getNumberFormatString(scale).toString())).format(money);
         }
         return output;
     }
 
     public static BigDecimal decimalToPercent(BigDecimal decimal) {
-        BigDecimal percent = null;
-        if (decimal != null)
-            percent = decimal.multiply(HUNDRED);
-        return percent;
+        return decimalToPercent(decimal, 4);
     }
 
     public static BigDecimal decimalToPercent(BigDecimal decimal, int scale) {
         BigDecimal percent = null;
         if (decimal != null)
-            percent = decimal.multiply(HUNDRED).setScale(scale,
-                    SystemConfig.ROUNDING_MODE);
+            percent = decimal.multiply(toBigDecimal(100)).setScale(scale, SystemConfig.ROUNDING_MODE);
         return percent;
     }
 
@@ -122,7 +143,7 @@ public class NumberUtil {
     public static BigDecimal percentToDecimal(BigDecimal percent, int scale) {
         BigDecimal dec = null;
         if (percent != null)
-            dec = percent.divide(HUNDRED, scale, SystemConfig.ROUNDING_MODE);
+            dec = percent.divide(toBigDecimal(100), scale, SystemConfig.ROUNDING_MODE);
         return dec;
     }
 
@@ -130,8 +151,7 @@ public class NumberUtil {
         return formatPercent(percent, scale, SystemConfig.ROUNDING_MODE);
     }
 
-    public static String formatPercent(BigDecimal percent, int scale,
-                                       RoundingMode roundingMode) {
+    public static String formatPercent(BigDecimal percent, int scale, RoundingMode roundingMode) {
         String output = null;
         if (percent != null) {
             percent = percent.setScale(scale + 2, roundingMode);
@@ -140,8 +160,7 @@ public class NumberUtil {
             else if (scale == 4)
                 output = format4percent.format(percent);
             else
-                output = (new DecimalFormat(getNumberFormatString(scale)
-                        .append("%").toString())).format(percent);
+                output = (new DecimalFormat(getNumberFormatString(scale).append("%").toString())).format(percent);
         }
         return output;
     }
@@ -191,7 +210,101 @@ public class NumberUtil {
             return null;
     }
 
+    /**
+     * 判断一个数值是否处于区间内
+     *
+     * @param val         原值
+     * @param min         最小值
+     * @param max         最大值
+     * @param includeType LEFT/RIGHT/BOTH/NONE  包含左值/右值/全部/不含
+     * @return
+     */
+    //传入BigDecimal单值
+    public static boolean between(BigDecimal val, BigDecimal min, BigDecimal max, String includeType) {
+        if (val == null || min == null || max == null) {
+            return false;
+        }
+        if (BaseConstant.INCLUDE_TYPE_LEFT.equals(includeType)) {
+            return min.compareTo(val) <= 0 && max.compareTo(val) > 0;
+        } else if (BaseConstant.INCLUDE_TYPE_RIGHT.equals(includeType)) {
+            return min.compareTo(val) < 0 && max.compareTo(val) >= 0;
+        } else if (BaseConstant.INCLUDE_TYPE_BOTH.equals(includeType)) {
+            return min.compareTo(val) <= 0 && max.compareTo(val) >= 0;
+        } else if (BaseConstant.INCLUDE_TYPE_NONE.equals(includeType)) {
+            return min.compareTo(val) < 0 && max.compareTo(val) > 0;
+        }
+        return false;
+    }
+
+    //传入double单值
+    public static boolean between(double val, BigDecimal min, BigDecimal max, String includeType) {
+        return between(new BigDecimal(val), min, max, includeType);
+    }
+
+    //传入BigDecimal数组, 任一数值符合条件即为true
+    public static boolean between(BigDecimal[] values, BigDecimal min, BigDecimal max, String includeType) {
+        boolean result = false;
+        for (BigDecimal value : values) {
+            result = between(value, min, max, includeType) || result;
+        }
+        return result;
+    }
+
+    //传入double数组
+    public static boolean between(double[] values, BigDecimal min, BigDecimal max, String includeType) {
+        boolean result = false;
+        for (double value : values) {
+            result = between(new BigDecimal(value), min, max, includeType) || result;
+        }
+        return result;
+    }
+
+    public static double toDouble(BigDecimal val) {
+        return val == null ? 0 : val.doubleValue();
+    }
+
+    public static double toDouble(BigDecimal value, double defaultValue) {
+        return value == null ? defaultValue : value.doubleValue();
+    }
+
+    public static BigDecimal min(BigDecimal... numbers) {
+        BigDecimal min = null;
+        if (numbers != null) {
+            BigDecimal abigdecimal[];
+            int j = (abigdecimal = numbers).length;
+            for (int i = 0; i < j; i++) {
+                BigDecimal num = abigdecimal[i];
+                if (num != null)
+                    if (min == null)
+                        min = num;
+                    else
+                        min = min.min(num);
+            }
+        }
+        return min;
+    }
+
+    public static BigDecimal max(BigDecimal... numbers) {
+        BigDecimal max = null;
+        if (numbers != null) {
+            BigDecimal abigdecimal[];
+            int j = (abigdecimal = numbers).length;
+            for (int i = 0; i < j; i++) {
+                BigDecimal num = abigdecimal[i];
+                if (num != null)
+                    if (max == null)
+                        max = num;
+                    else
+                        max = max.max(num);
+            }
+        }
+        return max;
+    }
+
     public static void main(String[] args) {
-        System.out.println(validateMinMax(BigDecimal.ZERO, BigDecimal.ZERO));
+//        System.out.println(validateMinMax(BigDecimal.ZERO, BigDecimal.ZERO));
+        System.out.println(compareTo(toBigDecimal(1), toBigDecimal(-1)));
+
+
     }
 }

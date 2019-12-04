@@ -4,6 +4,7 @@
  */
 package com.ftx.frame.common.component;
 
+import com.ftx.frame.util.BaseConstant;
 import com.ftx.frame.util.date.DateUtil;
 import com.ftx.frame.util.email.EmailEntity;
 import com.ftx.frame.util.email.EmailUtil;
@@ -33,12 +34,23 @@ public class FtExceptionResolver implements HandlerExceptionResolver {
                                          HttpServletResponse response, Object obj, Exception ex) {
         ModelAndView mv = new ModelAndView();
         UUID uuid = UUID.randomUUID();
+        if (ex instanceof FtxException) {
+            FtxException exception = (FtxException) ex;
 
-        // response返回
-        response.setStatus(HttpStatus.ACCEPTED.value());
-        ResponseUtil.setResponseHeader(response);
-        ResponseUtil.setResponseWriter(response, ResponseUtil.RESPONSE_TYPE_E,
-                request.getRequestURL() + "===" + uuid.toString());
+            // 自定义报错信息
+            response.setStatus(BaseConstant.HTTP_ERROR_CODE);
+            ResponseUtil.setResponseHeader(response);
+            ResponseUtil.setResponseWriter(response, exception.getReturn_code(), exception.getReturn_desc());
+
+        }else{
+            // response返回
+            response.setStatus(HttpStatus.ACCEPTED.value());
+            ResponseUtil.setResponseHeader(response);
+            ResponseUtil.setResponseWriter(response, ResponseUtil.RESPONSE_TYPE_E,
+                    request.getRequestURL() + "===" + uuid.toString());
+        }
+
+
 
         // 数据库记录
         StringWriter sw = new StringWriter();

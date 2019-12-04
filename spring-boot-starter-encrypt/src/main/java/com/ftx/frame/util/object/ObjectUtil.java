@@ -65,8 +65,7 @@ public final class ObjectUtil {
         }
     }
 
-    private static PropertyDescriptor getSameNamePropertyDescriptor(
-            PropertyDescriptor fromPd, PropertyDescriptor toPds[]) {
+    private static PropertyDescriptor getSameNamePropertyDescriptor(PropertyDescriptor fromPd, PropertyDescriptor toPds[]) {
         PropertyDescriptor retPd = null;
         PropertyDescriptor apropertydescriptor[];
         int j = (apropertydescriptor = toPds).length;
@@ -107,8 +106,7 @@ public final class ObjectUtil {
         return copyInstance;
     }
 
-    public static <T> PropertyDescriptor[] retrievePropertyDescriptors(
-            Class<T> clazz) throws RuntimeException {
+    public static <T> PropertyDescriptor[] retrievePropertyDescriptors(Class<T> clazz) throws RuntimeException {
         BeanInfo beanInfo = null;
         try {
             beanInfo = Introspector.getBeanInfo(clazz);
@@ -141,13 +139,8 @@ public final class ObjectUtil {
      * @param fieldName
      * @param isBoolean true is "is" method, false is "get" method
      * @return
-     * @throws NoSuchMethodException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
      */
-    public static Object invokeGetter(Object object, String fieldName,
-                                      boolean isBoolean) throws NoSuchMethodException,
-            IllegalAccessException, InvocationTargetException {
+    public static Object invokeGetter(Object object, String fieldName, boolean isBoolean) {
         return invokeWithGetterMethodName(object, makeGetter(fieldName, isBoolean));
     }
 
@@ -157,20 +150,23 @@ public final class ObjectUtil {
      * @param object
      * @param fieldName
      * @param value
-     * @throws NoSuchMethodException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
      */
-    public static void invokeSetter(Object object, String fieldName,
-                                    Object value) throws NoSuchMethodException, IllegalAccessException,
-            InvocationTargetException {
-        MethodUtils.invokeMethod(object, makeSetter(fieldName), value);
+    public static void invokeSetter(Object object, String fieldName, Object value) {
+        try {
+            MethodUtils.invokeMethod(object, makeSetter(fieldName), value);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 
-    private static Object invokeWithGetterMethodName(Object object,
-                                                     String getterMethodName) throws NoSuchMethodException,
-            IllegalAccessException, InvocationTargetException {
-        return MethodUtils.invokeMethod(object, getterMethodName, null);
+    private static Object invokeWithGetterMethodName(Object object, String getterMethodName) {
+        Object o = null;
+        try {
+            o = MethodUtils.invokeMethod(object, getterMethodName, null);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return o;
     }
 
     private static String makeSetter(String fieldName) {

@@ -27,7 +27,7 @@ public class JsonTimestampSerializer extends JsonSerializer<Timestamp> {
 			SerializerProvider provider) throws IOException,
 			JsonProcessingException {
 
-		gen.writeString(DateUtil.dateToString(timestamp,
+		gen.writeString(DateUtil.timestampToString(timestamp,
 				SystemConfig.DATETIME_FORMAT));
 	}
 

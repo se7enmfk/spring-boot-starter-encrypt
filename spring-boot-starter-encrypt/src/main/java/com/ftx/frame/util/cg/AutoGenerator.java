@@ -513,10 +513,10 @@ public class AutoGenerator {
      */
     private BufferedWriter buildClassComment(BufferedWriter bw, String text) throws IOException {
         bw.write("/**\n");
-        bw.write(" * " + text+"\n");
+        bw.write(" * " + text + "\n");
         bw.write(" *\n");
-        bw.write(" * @author " + config.getAuthor()+"\n");
-        bw.write(" * @since " + DateUtil.getCurrDateTimeStr()+"\n");
+        bw.write(" * @author " + config.getAuthor() + "\n");
+        bw.write(" * @since " + DateUtil.getCurrDateTimeStr() + "\n");
         bw.write(" */\n");
         return bw;
     }
@@ -558,26 +558,22 @@ public class AutoGenerator {
         bw.newLine();
         bw.write("import java.io.Serializable;");
         bw.newLine();
-        if (isDate(types) || isTimestamp(types)) {
+        /*if (isDate(types) || isTimestamp(types)) {
             bw.write("import com.fasterxml.jackson.databind.annotation.JsonSerialize;");
             bw.newLine();
-        }
+        }*/
         if (isDate(types)) {
-            bw.write("import java.util.Date;");
-            bw.newLine();
-            bw.write("import com.ftx.frame.common.component.JsonDateSerializer;");
-            bw.newLine();
+            bw.write("import java.sql.Date;\n");
+//            bw.write("import com.ftx.frame.common.component.JsonDateSerializer;");
+//            bw.newLine();
         }
         if (isTimestamp(types)) {
-            bw.write("import java.sql.Timestamp;");
-            bw.newLine();
-            bw.write("import com.ftx.frame.common.component.JsonTimestampSerializer;");
-            bw.newLine();
+            bw.write("import java.sql.Timestamp;\n");
+            bw.write("import com.fasterxml.jackson.annotation.JsonFormat;\n");
         }
 
         if (isDecimal(types)) {
-            bw.write("import java.math.BigDecimal;");
-            bw.newLine();
+            bw.write("import java.math.BigDecimal;\n");
         }
         bw.newLine();
         if (config.getIdType() != IdType.ID_WORKER && !IS_VIEW) {
@@ -617,7 +613,7 @@ public class AutoGenerator {
         if (null != config.getConfigBaseEntity()) {
             bw.write("public class " + beanName + " extends " + config.getConfigBaseEntity().getClassName() + " {");
         } else {
-            bw.write("public class " + beanName + " extends BaseObject implements Serializable {");
+            bw.write("public class " + beanName + " extends BaseObject<"+beanName+"> implements Serializable {");
         }
         bw.newLine();
         bw.newLine();
@@ -668,17 +664,17 @@ public class AutoGenerator {
                 bw.newLine();
             } else if (isLine && !config.isDbColumnUnderline()) {
                 // @TableField(value = "test_type", exist = false)
-                bw.write("\t@TableField");
-                bw.newLine();
+//                bw.write("\t@TableField");
+//                bw.newLine();
             }
 
-            if (types.get(i).toLowerCase().contains("date")) {
+            /*if (types.get(i).toLowerCase().contains("date")) {
                 bw.write("\t@JsonSerialize(using = JsonDateSerializer.class)");
                 bw.newLine();
-            }
+            }*/
             if (types.get(i).toLowerCase().contains("timestamp")) {
-                bw.write("\t@JsonSerialize(using = JsonTimestampSerializer.class)");
-                bw.newLine();
+//                bw.write("\t@JsonSerialize(using = JsonTimestampSerializer.class)");
+                bw.write("\t@JsonFormat(pattern = \"yyyy-MM-dd HH:mm:ss\")\n");
             }
             bw.write("\tprivate " + processType(types.get(i)) + " " + field + ";");
             bw.newLine();
@@ -699,34 +695,37 @@ public class AutoGenerator {
 
             String _field = _tempField.substring(0, 1).toUpperCase() + _tempField.substring(1);
             bw.newLine();
-            bw.write("\tpublic " + _tempType + " get" + _field + "() {");
-            bw.newLine();
-            bw.write("\t\treturn this." + _tempField + ";");
-            bw.newLine();
-            bw.write("\t}");
-            bw.newLine();
-            bw.newLine();
+            bw.write("\tpublic " + _tempType + " get" + _field + "() {\n");
+            bw.write("\t\treturn this." + _tempField + ";\n");
+            bw.write("\t}\n\n");
 
             /* 是否为构建者模型 */
             if (config.isBuliderModel()) {
-                bw.write("\tpublic " + beanName + " set" + _field + "(" + _tempType + " " + _tempField + ") {");
-                bw.newLine();
-                bw.write("\t\tthis." + _tempField + " = " + _tempField + ";");
-                bw.newLine();
-                bw.write("\t\treturn this;");
+                bw.write("\tpublic " + beanName + " set" + _field + "(" + _tempType + " " + _tempField + ") {\n");
+                bw.write("\t\tthis." + _tempField + " = " + _tempField + ";\n");
+                bw.write("\t\treturn this;\n");
             } else {
-                bw.write("\tpublic void set" + _field + "(" + _tempType + " " + _tempField + ") {");
-                bw.newLine();
-                bw.write("\t\tthis." + _tempField + " = " + _tempField + ";");
+                bw.write("\tpublic void set" + _field + "(" + _tempType + " " + _tempField + ") {\n");
+                bw.write("\t\tthis." + _tempField + " = " + _tempField + ";\n");
             }
-            bw.newLine();
-            bw.write("\t}");
-            bw.newLine();
+            bw.write("\t}\n");
         }
-
-        bw.newLine();
-        bw.write("}");
-        bw.newLine();
+        /*
+         * 生成toString方法
+         */
+        bw.write("\t@Override\n" +
+                "\tpublic String toString() {\n" +
+                "\t\treturn \"" + beanName + " {\" +\n");
+        String comma = "";
+        for (int i = 0; i < size; i++) {
+            String _tempField = config.namingOfHump ? processField(columns.get(i)) : columns.get(i).toLowerCase();
+            if (i > 0)
+                comma = ", ";
+            bw.write("\t\t\t\t\"" + comma + _tempField + "='\" + " + _tempField + " + '\\'' +\n");
+        }
+        bw.write("\t\t\t\t'}';\n" +
+                "\t}\n" +
+                "}\n");
         bw.flush();
         bw.close();
     }
@@ -812,8 +811,8 @@ public class AutoGenerator {
         bw.write("<mapper namespace=\"" + MAPPERPACKAGE + "." + mapperName + "\">");
         bw.newLine();
         bw.newLine();
-        bw.write("\t<cache type=\"com.ftx.frame.util.redisCache.LoggingRedisCache\"  />");
-        bw.newLine();
+//        bw.write("\t<cache type=\"com.ftx.frame.util.redisCache.LoggingRedisCache\"  />");
+//        bw.newLine();
         bw.newLine();
 
 
@@ -856,21 +855,22 @@ public class AutoGenerator {
         bw.write("import org.springframework.beans.factory.annotation.Autowired;\n");
         bw.write("import org.springframework.web.bind.annotation.RequestMapping;\n");
         bw.write("import org.springframework.web.bind.annotation.PostMapping;\n");
+        bw.write("import org.springframework.web.bind.annotation.RequestBody;\n");
         bw.write("import org.springframework.web.bind.annotation.RestController;\n\n");
-        bw.write("import com.baomidou.mybatisplus.plugins.Page;\n");
+//        bw.write("import com.baomidou.mybatisplus.plugins.Page;\n");
         bw.write("import " + ENTITYPACKAGE + "." + beanName + ";\n");
         bw.write("import " + SERVICEPACKAGE + "." + serviceName + ";\n");
         bw.write("import com.ftx.biz.common.controller.BaseController;\n");
         bw.write("import com.ftx.biz.common.model.BaseResult;\n");
-        bw.write("import org.slf4j.Logger;\n");
-        bw.write("import org.slf4j.LoggerFactory;\n\n");
+//        bw.write("import org.slf4j.Logger;\n");
+//        bw.write("import org.slf4j.LoggerFactory;\n\n");
         bw = buildClassComment(bw, beanName + " 表数据控制层");
         bw.write("@RestController");
         bw.newLine();
         bw.write("@RequestMapping(\"/\")");
         bw.newLine();
         bw.write("public class " + controllerName + " extends BaseController {\n\n");
-        bw.write("\tprivate Logger logger = LoggerFactory.getLogger(this.getClass());\n\n");
+//        bw.write("\tprivate Logger logger = LoggerFactory.getLogger(this.getClass());\n\n");
         bw.write("\t@Autowired");
         bw.newLine();
         bw.write("\tprivate " + serviceName + " " + serviceNameUse + ";");
@@ -881,20 +881,20 @@ public class AutoGenerator {
             bw.newLine();
             bw.write("\t@PostMapping(value = \"" + request_mapping + "\")");
             bw.newLine();
-            bw.write("\tpublic BaseResult<" + beanName + "> save(" + beanName + " " + beanNameUse + "){");
+            bw.write("\tpublic BaseResult<" + beanName + "> save(@RequestBody " + beanName + " " + beanNameUse + "){");
             bw.newLine();
             bw.write("\t\treturn " + serviceNameUse + ".save(" + beanNameUse + ");");
             bw.newLine();
             bw.write("\t}");
             bw.newLine();
         }
-        request_mapping = "/" + moduleName + "/" + bean+"One";
+        request_mapping = "/" + moduleName + "/" + bean + "One";
         bw.newLine();
         bw.write("\t/** select one entity */");
         bw.newLine();
         bw.write("\t@PostMapping(value = \"" + request_mapping + "\")");
         bw.newLine();
-        bw.write("\tpublic " + beanName + " getOne(" + beanName + " " + beanNameUse + "){");
+        bw.write("\tpublic " + beanName + " getOne(@RequestBody " + beanName + " " + beanNameUse + "){");
         bw.newLine();
         bw.write("\t\treturn " + serviceNameUse + ".getOne(" + beanNameUse + ");");
         bw.newLine();
@@ -906,17 +906,17 @@ public class AutoGenerator {
         bw.newLine();
         bw.write("\t@PostMapping(value = \"" + request_mapping + "\")");
         bw.newLine();
-        bw.write("\tpublic List<" + beanName + "> retrieveList(" + beanName + " " + beanNameUse + "){");
+        bw.write("\tpublic List<" + beanName + "> retrieveList(@RequestBody " + beanName + " " + beanNameUse + "){");
         bw.newLine();
         bw.write("\t\treturn " + serviceNameUse + ".retrieveList(" + beanNameUse + ");");
         bw.newLine();
         bw.write("\t}\n");
-        request_mapping = "/" + moduleName + "/" + bean + "Page";
-        bw.write("\t/** select entity page  */\n");
-        bw.write("\t@PostMapping(value = \"" + request_mapping + "\")\n");
-        bw.write("\tpublic Page<" + beanName + "> retrievePage(Page<" + beanName + "> page," + beanName + " " + beanNameUse + "){\n");
-        bw.write("\t\treturn " + serviceNameUse + ".retrievePage(page," + beanNameUse + ");\n");
-        bw.write("\t}\n\n");
+//        request_mapping = "/" + moduleName + "/" + bean + "Page";
+//        bw.write("\t/** select entity page  */\n");
+//        bw.write("\t@PostMapping(value = \"" + request_mapping + "\")\n");
+//        bw.write("\tpublic Page<" + beanName + "> retrievePage(Page<" + beanName + "> page," + beanName + " " + beanNameUse + "){\n");
+//        bw.write("\t\treturn " + serviceNameUse + ".retrievePage(page," + beanNameUse + ");\n");
+//        bw.write("\t}\n\n");
         bw.write("}");
         bw.flush();
         bw.close();
@@ -1066,11 +1066,10 @@ public class AutoGenerator {
         String controllerName = String.format(config.getControllerName(), beanName);
         String moduleName = "";
         table = table.toUpperCase();
-        if (table.contains("V_")&&table.indexOf("V_")==0){
-            table = table.substring(2,table.length());
-            moduleName = table.substring(0,table.indexOf("_")).toLowerCase();
-        }
-        else
+        if (table.contains("V_") && table.indexOf("V_") == 0) {
+            table = table.substring(2, table.length());
+            moduleName = table.substring(0, table.indexOf("_")).toLowerCase();
+        } else
             moduleName = (table.substring(0, table.indexOf("_")).toLowerCase());
         String saveDir = gf1.getPath();
         String saveDirXml = gf2.getPath();

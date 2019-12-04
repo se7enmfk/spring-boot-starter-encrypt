@@ -7,7 +7,7 @@ import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.Date;
+import java.sql.Date;
 
 public class StringUtil {
 
@@ -88,7 +88,7 @@ public class StringUtil {
         else if (val instanceof Date)
             value = DateUtil.dateToString((Date) val, SystemConfig.DATE_FORMAT);
         else if (val instanceof Timestamp)
-            value = DateUtil.dateToString((Timestamp) val,
+            value = DateUtil.timestampToString((Timestamp) val,
                     SystemConfig.DATETIME_FORMAT);
         else
             value = val.toString();
@@ -117,6 +117,12 @@ public class StringUtil {
         }
     }
 
+    public static boolean equals(String a, String b) {
+        if (a == null) a = "";
+        if (b == null) b = "";
+        return a.equals(b);
+    }
+
     public static String[][] stringToArray(String str) {
         String[] semicolonSplit = str.split(BaseConstant.SEMICOLON);
         String[][] arr = new String[semicolonSplit.length][];
@@ -131,21 +137,22 @@ public class StringUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(getSubStr("/adm/asdf", "/", 2));
+        System.out.println(equals(null,""));
+//        System.out.println(getSubStr("/adm/asdf", "/", 2));
         // System.out.println(concatzero(new BigDecimal(5), new
         // BigDecimal(219999999)));
 
         // System.out.println(concat("", "b", "aaa"));
 
-		/*
+        /*
          * int times = 100000; String s1 = ""; String s2 = ""; StringBuffer s3 =
-		 * new StringBuffer(""); long a = System.currentTimeMillis(); for (int i
-		 * = 0; i < times; i++) { s1 = s1 + "a"; } long b =
-		 * System.currentTimeMillis(); for (int i = 0; i < times; i++) { s2 =
-		 * s2.concat("a"); } long c = System.currentTimeMillis(); for (int i =
-		 * 0; i < times; i++) { s3.append("a"); } long d =
-		 * System.currentTimeMillis(); System.out.print((b - a) + "|" + (c - b)
-		 * + "|" + (d - c));
-		 */
+         * new StringBuffer(""); long a = System.currentTimeMillis(); for (int i
+         * = 0; i < times; i++) { s1 = s1 + "a"; } long b =
+         * System.currentTimeMillis(); for (int i = 0; i < times; i++) { s2 =
+         * s2.concat("a"); } long c = System.currentTimeMillis(); for (int i =
+         * 0; i < times; i++) { s3.append("a"); } long d =
+         * System.currentTimeMillis(); System.out.print((b - a) + "|" + (c - b)
+         * + "|" + (d - c));
+         */
     }
 }

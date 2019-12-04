@@ -96,6 +96,7 @@ public class JWTUtil {
                 request.setAttribute(BaseConstant.USER, claimsSet.getClaim(BaseConstant.USER));
                 request.setAttribute(BaseConstant.DE_USER, claimsSet.getClaim(BaseConstant.DE_USER));
                 request.setAttribute(BaseConstant.ROLE, claimsSet.getClaim(BaseConstant.ROLE));
+                request.setAttribute(BaseConstant.BRAN, claimsSet.getClaim(BaseConstant.BRAN));
                 request.setAttribute(BaseConstant.UUID, claimsSet.getJWTID());
             }
         } catch (ParseException | JOSEException e) {

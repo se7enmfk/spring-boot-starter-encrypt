@@ -5,13 +5,13 @@
 package com.ftx.frame.util.file;
 
 import com.ftx.frame.util.BaseConstant;
-import com.ftx.frame.util.string.StringUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.net.URLEncoder;
@@ -32,7 +32,21 @@ public class FileUtil {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            IOUtils.closeQuietly(input);
+            IOUtil.closeQuietly(input);
+        }
+    }
+
+    /**
+     * @param in
+     * @param parent
+     * @param fileName
+     */
+    public static void saveFile(MultipartFile in, String parent, String fileName) {
+
+        try {
+            saveFile(in.getInputStream(), parent, fileName);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -55,30 +69,37 @@ public class FileUtil {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            IOUtils.closeQuietly(output);
-            IOUtils.closeQuietly(in);
+            IOUtil.closeQuietly(output);
+            IOUtil.closeQuietly(in);
         }
     }
 
     /**
      * 下载文件 ie不支持201状态码，改为200
      *
-     * @param parent           template路径
-     * @param originalFilename 文件原名
-     * @param fileName         下载文件名
+     * @param path
+     * @param fileName
      * @return
      */
-    public static ResponseEntity downFile(String parent, String originalFilename, String fileName) {
-        return downFile(parent, originalFilename, fileName, MediaType.APPLICATION_OCTET_STREAM);
+    public static ResponseEntity downFile(String path, String fileName) {
+        return downFile(path, fileName, MediaType.APPLICATION_OCTET_STREAM);
     }
 
-    public static ResponseEntity downFile(String parent, String originalFilename, String fileName, MediaType mediaType) {
-        File file = new File(StringUtil.concat(parent, originalFilename));
+    public static ResponseEntity downFile(String path, String fileName, MediaType mediaType) {
+        File file = new File(path);
+        byte[] bytes;
         try {
+            if (file.exists()) {
+                bytes = FileUtils.readFileToByteArray(file);
+            } else {
+                InputStream resourceAsStream = FileUtil.class.getResourceAsStream(path);
+                bytes = new byte[resourceAsStream.available()];
+                resourceAsStream.read(bytes);
+            }
             HttpHeaders headers = new HttpHeaders();
             headers.setContentDispositionFormData(BaseConstant.ATTACHMENT, URLEncoder.encode(fileName, BaseConstant.UTF8));
             headers.setContentType(mediaType);
-            return new ResponseEntity<>(FileUtils.readFileToByteArray(file), headers, HttpStatus.OK);
+            return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -110,7 +131,7 @@ public class FileUtil {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            IOUtils.closeQuietly(out);
+            IOUtil.closeQuietly(out);
         }
         return null;
     }
@@ -131,10 +152,11 @@ public class FileUtil {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            IOUtils.closeQuietly(out);
+            IOUtil.closeQuietly(out);
         }
         return null;
     }
+
     /**
      * 建目录
      */
@@ -145,7 +167,7 @@ public class FileUtil {
             file1.mkdirs();
     }
 
-    public static String readFileToString(String filePath){
+    public static String readFileToString(String filePath) {
 
         File file = new File(filePath);
 

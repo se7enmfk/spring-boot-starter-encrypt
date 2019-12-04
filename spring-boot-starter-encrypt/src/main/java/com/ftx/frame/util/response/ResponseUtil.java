@@ -4,14 +4,12 @@
  */
 package com.ftx.frame.util.response;
 
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.http.MediaType;
-
 import com.ftx.frame.util.BaseConstant;
 import com.ftx.frame.util.string.StringUtil;
+import org.springframework.http.MediaType;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class ResponseUtil {
 

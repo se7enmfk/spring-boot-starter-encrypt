@@ -45,7 +45,7 @@ public class RedisCache implements Cache {
 	public void putObject(Object key, Object value) {
 		Jedis jedis = null;
 		try {
-			jedis = JedisSentinelPoolUtil.getIstance().getResource();
+//			jedis = JedisSentinelPoolUtil.getIstance().getResource();
 			jedis.select(DB_INDEX);
 
 			byte[] keys = getKey(key).getBytes(UTF8);
@@ -66,7 +66,7 @@ public class RedisCache implements Cache {
 		Jedis jedis = null;
 		Object value = null;
 		try {
-			jedis = JedisSentinelPoolUtil.getIstance().getResource();
+//			jedis = JedisSentinelPoolUtil.getIstance().getResource();
 			jedis.select(DB_INDEX);
 			value = SerializeUtil.unserialize(jedis.get(getKey(key).getBytes(UTF8)));
 			logger.debug("从缓存中获取-----" + this.id);
@@ -87,7 +87,7 @@ public class RedisCache implements Cache {
 		Jedis jedis = null;
 		Object value = null;
 		try {
-			jedis = JedisSentinelPoolUtil.getIstance().getResource();
+//			jedis = JedisSentinelPoolUtil.getIstance().getResource();
 			jedis.select(DB_INDEX);
 			value = jedis.del(getKey(key).getBytes(UTF8));
 			logger.debug("LRU算法从缓存中移除-----" + this.id);
@@ -106,7 +106,7 @@ public class RedisCache implements Cache {
 	public void clear() {
 		Jedis jedis = null;
 		try {
-			jedis = JedisSentinelPoolUtil.getIstance().getResource();
+//			jedis = JedisSentinelPoolUtil.getIstance().getResource();
 			jedis.select(DB_INDEX);
 			// 如果有删除操作，会影响到整个表中的数据，因此要清空一个mapper的缓存（一个mapper的不同数据操作对应不同的key）
 			Set<byte[]> keys = jedis.keys(getKeys(null).getBytes(UTF8));
@@ -140,7 +140,7 @@ public class RedisCache implements Cache {
 	public void clearAll() {
 		Jedis jedis = null;
 		try {
-			jedis = JedisSentinelPoolUtil.getIstance().getResource();
+//			jedis = JedisSentinelPoolUtil.getIstance().getResource();
 			jedis.flushDB();
 			jedis.flushAll();
 		} catch (Exception e) {
@@ -187,7 +187,7 @@ public class RedisCache implements Cache {
 		Jedis jedis = null;
 		int result = 0;
 		try {
-			jedis = JedisSentinelPoolUtil.getIstance().getResource();
+//			jedis = JedisSentinelPoolUtil.getIstance().getResource();
 			jedis.select(DB_INDEX);
 			Set<byte[]> keys = jedis.keys(getKeys(null).getBytes(UTF8));
 			if (null != keys && !keys.isEmpty()) {

@@ -13,6 +13,13 @@ import java.util.Map;
 
 public class DyMethodUtil {
 
+    /**
+     * 反射方法
+     *
+     * @param jexlExp
+     * @param map
+     * @return
+     */
     public static Object invokeMethod(String jexlExp, Map<String, Object> map) {
 
         JexlEngine jexl = new JexlEngine();

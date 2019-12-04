@@ -39,6 +39,7 @@ public class BaseConstant {
     public final static String INCLUDE_TYPE_BOTH = "BOTH";
     public final static String INCLUDE_TYPE_NONE = "NONE";
 
+    public final static int HTTP_ERROR_CODE = 299;
     /**
      * mode
      */

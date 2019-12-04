@@ -12,7 +12,7 @@ import com.ftx.frame.util.date.DateUtil;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * model日期转换json日期  

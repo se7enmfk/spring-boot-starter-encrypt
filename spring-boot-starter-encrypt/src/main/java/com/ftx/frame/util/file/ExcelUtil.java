@@ -5,20 +5,21 @@
 package com.ftx.frame.util.file;
 
 import com.ftx.frame.common.component.SystemConfig;
+import com.ftx.frame.util.collection.CollectionUtil;
 import com.ftx.frame.util.string.StringUtil;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -40,8 +41,20 @@ public class ExcelUtil {
      * @return
      * @throws Exception
      */
-    public static XSSFWorkbook getXSSFWorkbook(String filePath) throws Exception {
-        return getXSSFWorkbook(new FileInputStream(filePath));
+    public static Workbook getWorkbook(String filePath, String type) {
+        try {
+            File file = new File(filePath);
+            InputStream in;
+            if (file.exists()) {
+                in = new FileInputStream(filePath);
+            } else {
+                in = ExcelUtil.class.getResourceAsStream(filePath);
+            }
+            return getWorkbook(in, type);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -51,8 +64,21 @@ public class ExcelUtil {
      * @return
      * @throws Exception
      */
-    public static XSSFWorkbook getXSSFWorkbook(InputStream in) throws Exception {
-        return new XSSFWorkbook(in);
+    public static Workbook getWorkbook(InputStream in, String type) {
+        if ("xls".equals(type)) {
+            try {
+                return new HSSFWorkbook(in);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                return new XSSFWorkbook(in);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
     /**
@@ -120,7 +146,10 @@ public class ExcelUtil {
     public static <T> void setCellByList(Sheet sheet, int startRow, List<T> dataList, String... fieldNames) {
         //模板行
         Row rowTemplate = sheet.getRow(startRow);
-        Object cellValue = null;
+        if (dataList.size() > 1) {
+            shiftRows(sheet, startRow + 1, sheet.getLastRowNum(), dataList.size() - 1);
+        }
+        Object cellValue;
         if (dataList != null && dataList.size() > 0) {
             for (int i = 0; i < dataList.size(); i++) {
                 for (int j = 0; j < fieldNames.length; j++) {
@@ -128,7 +157,6 @@ public class ExcelUtil {
                     if (StringUtil.isNotEmpty(fieldNames[j])) {
                         cellValue = getFieldValue(dataList.get(i), fieldNames[j]);
                     }
-
                     setCellByValue(sheet, startRow + i, j, null, cellValue, rowTemplate);
                 }
             }
@@ -169,7 +197,6 @@ public class ExcelUtil {
         }
     }
 
-
     /**
      * 将List数据，写入到excel
      * 适合以列表展现数据的情况
@@ -189,7 +216,7 @@ public class ExcelUtil {
         Row rowTemplate = sheet.getRow(startRow);
         Object cellValue = null;
         int maxDatasSize = 0;
-        if (datas != null && datas.size() > 0) {
+        if (CollectionUtil.isNotEmpty(datas)) {
             for (int i = 0; i < datas.size(); i++) {
                 if (maxDatasSize < datas.get(i).size()) {
                     maxDatasSize = datas.get(i).size();
@@ -205,8 +232,8 @@ public class ExcelUtil {
                     j++;
                 }
             }
+            refreshCellStyle(sheet, startRow, startRow + datas.size() - 1, startCell, startCell + maxDatasSize, null, rowTemplate);
         }
-        refreshCellStyle(sheet, startRow, startRow + datas.size() - 1, startCell, startCell + maxDatasSize, null, rowTemplate);
     }
 
     /**
@@ -255,9 +282,9 @@ public class ExcelUtil {
             } else if (value instanceof Number) {
                 cell.setCellType(CellType.NUMERIC);
                 cell.setCellValue(Double.parseDouble(value.toString()));
-            } else if (value instanceof Date) {
+            } else if (value instanceof java.util.Date) {
                 cell.setCellType(CellType.STRING);
-                cell.setCellValue(com.ftx.frame.util.date.DateUtil.dateToString((Date) value, SystemConfig.DATE_FORMAT));
+                cell.setCellValue(com.ftx.frame.util.date.DateUtil.dateToString(new Date(((java.util.Date) value).getTime()), SystemConfig.DATE_FORMAT));
             }
         }
     }
@@ -302,13 +329,12 @@ public class ExcelUtil {
             return null;
         }
         Object result = null;
-        CellType cellTypeEnum = cell.getCellTypeEnum();
         switch (cell.getCellTypeEnum()) {
             case NUMERIC:
                 //add by tanyb  Excel导入时，日期类型的字符特殊处理
                 if (DateUtil.isCellDateFormatted(cell)) {
-                    Date date = cell.getDateCellValue();
-                    result = com.ftx.frame.util.date.DateUtil.dateToString(date, SystemConfig.DATE_FORMAT);
+                    java.util.Date date = cell.getDateCellValue();
+                    result = com.ftx.frame.util.date.DateUtil.dateToString(new Date(date.getTime()), SystemConfig.DATE_FORMAT);
                 } else {
                     result = cell.getNumericCellValue();
                     if (result != null) {
@@ -317,10 +343,10 @@ public class ExcelUtil {
                 }
                 break;
             case STRING:
-                result = cell.getRichStringCellValue().getString();
+                result = cell.getRichStringCellValue().getString().trim();
                 break;
             case FORMULA:
-                result = cell.getCellFormula();
+                result = cell.getCellFormula().trim();
                 break;
             case BOOLEAN:
                 result = cell.getBooleanCellValue();
@@ -517,6 +543,20 @@ public class ExcelUtil {
         }
     }
 
+    public static void saveExcelFile(Workbook wb, String file_path) {
+        FileOutputStream out = null;
+        File file = new File(file_path);
+        try {
+            out = new FileOutputStream(file);
+            wb.write(out);
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            IOUtil.closeQuietly(out);
+        }
+
+    }
 
 }
 

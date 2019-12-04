@@ -8,7 +8,13 @@ import java.io.IOException;
 
 public class JsonUtil {
 
-    public static String toJSON(Object o) {
+    /**
+     * 对象转化成json string
+     *
+     * @param o
+     * @return
+     */
+    public static String toJson(Object o) {
 
         ObjectMapper mapper = new ObjectMapper();
         String str = BaseConstant.EMPTY;
@@ -20,7 +26,15 @@ public class JsonUtil {
         return str;
     }
 
-    public static <T> T parseObject(String json, Class<T> tClass) {
+    /**
+     * json string 转化为对象
+     *
+     * @param json
+     * @param tClass
+     * @param <T>
+     * @return
+     */
+    public static <T> T fromJson(String json, Class<T> tClass) {
 
         ObjectMapper mapper = new ObjectMapper();
         T t = null;
