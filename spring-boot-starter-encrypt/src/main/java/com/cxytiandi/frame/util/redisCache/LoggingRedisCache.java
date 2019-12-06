@@ -4,7 +4,6 @@
  */
 package com.cxytiandi.frame.util.redisCache;
 
-import com.ftx.frame.util.redisCache.RedisCache;
 import org.apache.ibatis.cache.decorators.LoggingCache;
 
 public class LoggingRedisCache extends LoggingCache {

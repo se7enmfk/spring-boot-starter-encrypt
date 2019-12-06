@@ -1,8 +1,8 @@
 package com.cxytiandi.frame.util.http;
 
+import com.cxytiandi.frame.util.BaseConstant;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ftx.frame.util.BaseConstant;
 
 import java.io.IOException;
 

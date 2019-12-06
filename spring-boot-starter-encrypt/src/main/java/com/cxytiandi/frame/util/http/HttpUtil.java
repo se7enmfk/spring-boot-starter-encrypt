@@ -1,7 +1,7 @@
 package com.cxytiandi.frame.util.http;
 
-import com.ftx.frame.util.BaseConstant;
-import com.ftx.frame.util.string.StringUtil;
+import com.cxytiandi.frame.util.BaseConstant;
+import com.cxytiandi.frame.util.string.StringUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;

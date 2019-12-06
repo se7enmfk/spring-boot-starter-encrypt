@@ -4,8 +4,8 @@
  */
 package com.cxytiandi.frame.util.response;
 
-import com.ftx.frame.util.BaseConstant;
-import com.ftx.frame.util.string.StringUtil;
+import com.cxytiandi.frame.util.BaseConstant;
+import com.cxytiandi.frame.util.string.StringUtil;
 import org.springframework.http.MediaType;
 
 import javax.servlet.http.HttpServletResponse;

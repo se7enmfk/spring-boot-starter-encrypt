@@ -4,9 +4,8 @@
  */
 package com.cxytiandi.frame.util.email;
 
-import com.ftx.frame.common.component.SystemConfig;
-import com.ftx.frame.util.BaseConstant;
-import com.ftx.frame.util.email.EmailEntity;
+import com.cxytiandi.frame.common.component.SystemConfig;
+import com.cxytiandi.frame.util.BaseConstant;
 
 import javax.mail.Session;
 import javax.mail.Transport;

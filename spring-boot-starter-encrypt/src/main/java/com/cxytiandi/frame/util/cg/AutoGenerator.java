@@ -7,11 +7,8 @@ package com.cxytiandi.frame.util.cg;
 import com.baomidou.mybatisplus.enums.IdType;
 import com.baomidou.mybatisplus.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
-import com.ftx.frame.util.cg.ConfigDataSource;
-import com.ftx.frame.util.cg.ConfigGenerator;
-import com.ftx.frame.util.cg.ConfigIdType;
-import com.ftx.frame.util.date.DateUtil;
-import com.ftx.frame.util.string.StringUtil;
+import com.cxytiandi.frame.util.date.DateUtil;
+import com.cxytiandi.frame.util.string.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

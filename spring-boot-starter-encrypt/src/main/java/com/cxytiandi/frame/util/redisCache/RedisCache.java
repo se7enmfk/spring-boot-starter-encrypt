@@ -4,10 +4,9 @@
  */
 package com.cxytiandi.frame.util.redisCache;
 
-import com.ftx.frame.common.component.MapperDependencys;
-import com.ftx.frame.util.BaseConstant;
-import com.ftx.frame.util.redisCache.SerializeUtil;
-import com.ftx.frame.util.string.StringUtil;
+import com.cxytiandi.frame.common.component.MapperDependencys;
+import com.cxytiandi.frame.util.BaseConstant;
+import com.cxytiandi.frame.util.string.StringUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.ibatis.cache.Cache;
 import org.slf4j.Logger;

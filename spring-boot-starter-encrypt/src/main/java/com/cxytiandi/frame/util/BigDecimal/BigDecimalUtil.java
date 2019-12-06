@@ -4,7 +4,8 @@
  */
 package com.cxytiandi.frame.util.BigDecimal;
 
-import com.ftx.frame.util.BaseConstant;
+
+import com.cxytiandi.frame.util.BaseConstant;
 
 import java.math.BigDecimal;
 

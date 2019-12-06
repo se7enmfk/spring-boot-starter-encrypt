@@ -4,8 +4,7 @@
  */
 package com.cxytiandi.frame.util.file;
 
-import com.ftx.frame.util.BaseConstant;
-import com.ftx.frame.util.file.IOUtil;
+import com.cxytiandi.frame.util.BaseConstant;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.http.HttpHeaders;
@@ -33,7 +32,7 @@ public class FileUtil {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            com.ftx.frame.util.file.IOUtil.closeQuietly(input);
+            IOUtil.closeQuietly(input);
         }
     }
 
@@ -70,8 +69,8 @@ public class FileUtil {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            com.ftx.frame.util.file.IOUtil.closeQuietly(output);
-            com.ftx.frame.util.file.IOUtil.closeQuietly(in);
+            IOUtil.closeQuietly(output);
+            IOUtil.closeQuietly(in);
         }
     }
 
@@ -132,7 +131,7 @@ public class FileUtil {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            com.ftx.frame.util.file.IOUtil.closeQuietly(out);
+            IOUtil.closeQuietly(out);
         }
         return null;
     }

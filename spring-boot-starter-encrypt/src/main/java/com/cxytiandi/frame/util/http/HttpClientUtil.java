@@ -1,8 +1,7 @@
 package com.cxytiandi.frame.util.http;
 
-import com.ftx.frame.util.BaseConstant;
-import com.ftx.frame.util.http.JsonUtil;
-import com.ftx.frame.util.string.StringUtil;
+import com.cxytiandi.frame.util.BaseConstant;
+import com.cxytiandi.frame.util.string.StringUtil;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -114,7 +113,7 @@ public class HttpClientUtil {
                     result = EntityUtils.toString(entity, "UTF-8");
                     result = URLDecoder.decode(result, "UTF-8");
 
-                    Map<String, Object> map = com.ftx.frame.util.http.JsonUtil.fromJson(result, Map.class);
+                    Map<String, Object> map = JsonUtil.fromJson(result, Map.class);
                     if (map != null && BaseConstant.CODE_200.equals(map.get("code"))) {
                         result = map.get("entity").toString();
                     }

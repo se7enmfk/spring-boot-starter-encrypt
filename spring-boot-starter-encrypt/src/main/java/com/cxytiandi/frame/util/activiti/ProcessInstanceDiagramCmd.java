@@ -4,7 +4,7 @@
  */
 package com.cxytiandi.frame.util.activiti;
 
-import com.ftx.frame.util.string.StringUtil;
+import com.cxytiandi.frame.util.string.StringUtil;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.FlowElement;
 import org.activiti.bpmn.model.Process;

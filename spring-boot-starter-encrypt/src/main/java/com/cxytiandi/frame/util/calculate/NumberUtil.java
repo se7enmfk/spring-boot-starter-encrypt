@@ -4,9 +4,9 @@
  */
 package com.cxytiandi.frame.util.calculate;
 
-import com.ftx.frame.common.component.SystemConfig;
-import com.ftx.frame.util.BaseConstant;
-import com.ftx.frame.util.string.StringUtil;
+import com.cxytiandi.frame.common.component.SystemConfig;
+import com.cxytiandi.frame.util.BaseConstant;
+import com.cxytiandi.frame.util.string.StringUtil;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

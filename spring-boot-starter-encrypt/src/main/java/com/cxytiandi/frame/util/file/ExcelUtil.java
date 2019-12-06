@@ -4,10 +4,10 @@
  */
 package com.cxytiandi.frame.util.file;
 
-import com.ftx.frame.common.component.SystemConfig;
-import com.ftx.frame.util.collection.CollectionUtil;
-import com.ftx.frame.util.file.IOUtil;
-import com.ftx.frame.util.string.StringUtil;
+import com.cxytiandi.frame.common.component.SystemConfig;
+import com.cxytiandi.frame.util.collection.CollectionUtil;
+import com.cxytiandi.frame.util.date.DateUtil;
+import com.cxytiandi.frame.util.string.StringUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -285,7 +285,7 @@ public class ExcelUtil {
                 cell.setCellValue(Double.parseDouble(value.toString()));
             } else if (value instanceof java.util.Date) {
                 cell.setCellType(CellType.STRING);
-                cell.setCellValue(com.ftx.frame.util.date.DateUtil.dateToString(new Date(((java.util.Date) value).getTime()), SystemConfig.DATE_FORMAT));
+                cell.setCellValue(DateUtil.dateToString(new Date(((java.util.Date) value).getTime()), SystemConfig.DATE_FORMAT));
             }
         }
     }
@@ -333,9 +333,9 @@ public class ExcelUtil {
         switch (cell.getCellTypeEnum()) {
             case NUMERIC:
                 //add by tanyb  Excel导入时，日期类型的字符特殊处理
-                if (DateUtil.isCellDateFormatted(cell)) {
+                if (org.apache.poi.ss.usermodel.DateUtil.isCellDateFormatted(cell)) {
                     java.util.Date date = cell.getDateCellValue();
-                    result = com.ftx.frame.util.date.DateUtil.dateToString(new Date(date.getTime()), SystemConfig.DATE_FORMAT);
+                    result = DateUtil.dateToString(new Date(date.getTime()), SystemConfig.DATE_FORMAT);
                 } else {
                     result = cell.getNumericCellValue();
                     if (result != null) {

@@ -4,8 +4,8 @@
  */
 package com.cxytiandi.frame.util.statistics;
 
-import com.ftx.frame.util.calculate.NumberUtil;
-import com.ftx.frame.util.object.ObjectUtil;
+import com.cxytiandi.frame.util.calculate.NumberUtil;
+import com.cxytiandi.frame.util.object.ObjectUtil;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

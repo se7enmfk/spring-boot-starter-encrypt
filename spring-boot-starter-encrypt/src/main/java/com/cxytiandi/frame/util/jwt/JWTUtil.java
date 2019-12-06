@@ -4,9 +4,8 @@
  */
 package com.cxytiandi.frame.util.jwt;
 
-import com.ftx.frame.common.component.SystemConfig;
-import com.ftx.frame.util.BaseConstant;
-import com.ftx.frame.util.jwt.JWTClaims;
+import com.cxytiandi.frame.common.component.SystemConfig;
+import com.cxytiandi.frame.util.BaseConstant;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;

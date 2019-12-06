@@ -6,8 +6,8 @@
 
 package com.cxytiandi.frame.util.freemarker;
 
-import com.ftx.frame.util.BaseConstant;
-import com.ftx.frame.util.file.IOUtil;
+import com.cxytiandi.frame.util.BaseConstant;
+import com.cxytiandi.frame.util.file.IOUtil;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;

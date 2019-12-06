@@ -4,15 +4,12 @@
  */
 package com.cxytiandi.frame.util.cg;
 
-import com.ftx.frame.util.cg.AutoGenerator;
-import com.ftx.frame.util.cg.ConfigDataSource;
-import com.ftx.frame.util.cg.ConfigGenerator;
-import com.ftx.frame.util.properties.PropertiesUtil;
+import com.cxytiandi.frame.util.properties.PropertiesUtil;
 
 public class CustomGenerator {
     public static void main(String[] args) {
-        com.ftx.frame.util.cg.ConfigGenerator configGenerator = new ConfigGenerator();
-        com.ftx.frame.util.cg.AutoGenerator autoGenerator = new AutoGenerator();
+        ConfigGenerator configGenerator = new ConfigGenerator();
+        AutoGenerator autoGenerator = new AutoGenerator();
 
         PropertiesUtil p = PropertiesUtil.getInstance("database");
         // 配置 ORACLE 连接

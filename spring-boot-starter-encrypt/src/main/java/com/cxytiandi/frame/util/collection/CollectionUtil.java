@@ -4,8 +4,8 @@
  */
 package com.cxytiandi.frame.util.collection;
 
-import com.ftx.frame.util.calculate.NumberUtil;
-import com.ftx.frame.util.object.ObjectUtil;
+import com.cxytiandi.frame.util.calculate.NumberUtil;
+import com.cxytiandi.frame.util.object.ObjectUtil;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

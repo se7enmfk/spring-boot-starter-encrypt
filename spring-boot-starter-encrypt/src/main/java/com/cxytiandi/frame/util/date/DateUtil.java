@@ -4,8 +4,8 @@
  */
 package com.cxytiandi.frame.util.date;
 
-import com.ftx.frame.common.component.SystemConfig;
-import com.ftx.frame.util.string.StringUtil;
+import com.cxytiandi.frame.common.component.SystemConfig;
+import com.cxytiandi.frame.util.string.StringUtil;
 
 import java.sql.Date;
 import java.sql.Timestamp;
