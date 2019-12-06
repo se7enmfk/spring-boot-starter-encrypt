@@ -4,7 +4,7 @@
  */
 package com.cxytiandi.frame.common.component;
 
-import com.ftx.frame.util.properties.PropertiesUtil;
+import com.cxytiandi.frame.util.properties.PropertiesUtil;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;

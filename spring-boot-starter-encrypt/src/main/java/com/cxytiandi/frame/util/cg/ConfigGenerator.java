@@ -6,9 +6,6 @@ package com.cxytiandi.frame.util.cg;
 
 import com.baomidou.mybatisplus.enums.IdType;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
-import com.ftx.frame.util.cg.ConfigBaseEntity;
-import com.ftx.frame.util.cg.ConfigDataSource;
-import com.ftx.frame.util.cg.ConfigIdType;
 
 
 /**
@@ -136,7 +133,7 @@ public class ConfigGenerator {
 
 	protected ConfigDataSource configDataSource = ConfigDataSource.MYSQL;
 
-	protected com.ftx.frame.util.cg.ConfigIdType configIdType = com.ftx.frame.util.cg.ConfigIdType.STRING;
+	protected ConfigIdType configIdType = ConfigIdType.STRING;
 
 	protected ConfigBaseEntity configBaseEntity = null;
 
@@ -185,7 +182,7 @@ public class ConfigGenerator {
 
 	public String getSuperService() {
 		if (StringUtils.isEmpty(superService)) {
-			if (this.getConfigIdType() == com.ftx.frame.util.cg.ConfigIdType.STRING) {
+			if (this.getConfigIdType() == ConfigIdType.STRING) {
 				return "com.ftx.biz.common.service.BaseService";
 			} else {
 				return "com.baomidou.framework.service.ISuperService";
@@ -200,7 +197,7 @@ public class ConfigGenerator {
 
 	public String getSuperServiceImpl() {
 		if (StringUtils.isEmpty(superServiceImpl)) {
-			if (this.getConfigIdType() == com.ftx.frame.util.cg.ConfigIdType.STRING) {
+			if (this.getConfigIdType() == ConfigIdType.STRING) {
 				return "com.ftx.biz.common.service.impl.BaseServiceImpl";
 			} else {
 				return "com.baomidou.framework.service.impl.SuperServiceImpl";
@@ -329,7 +326,7 @@ public class ConfigGenerator {
 		this.configDataSource = configDataSource;
 	}
 
-	public com.ftx.frame.util.cg.ConfigIdType getConfigIdType() {
+	public ConfigIdType getConfigIdType() {
 		return configIdType;
 	}
 

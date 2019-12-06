@@ -4,12 +4,11 @@
  */
 package com.cxytiandi.frame.common.component;
 
+import com.cxytiandi.frame.util.date.DateUtil;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import com.ftx.frame.common.component.SystemConfig;
-import com.ftx.frame.util.date.DateUtil;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
